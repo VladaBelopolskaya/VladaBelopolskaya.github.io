@@ -34,8 +34,6 @@
         xhr.onerror = function () {
             alert('Произошла ошибка соединения');
         };
-
-        console.log(xhr.status);
     }
 
     /**
