@@ -16,7 +16,7 @@
      * Отправка email и password на сервер
      */
     function upload() {
-
+        buttonSubmit.disabled = true;
         removeError();
 
         const xhr = new XMLHttpRequest();
@@ -32,6 +32,7 @@
 
         xhr.onload = function () {
             if (xhr.response.error) {
+                buttonSubmit.disabled = false;
                 errorLogin();
                 errorEmail();
             } else {
@@ -41,6 +42,7 @@
             }
         };
         xhr.onerror = function () {
+            buttonSubmit.disabled = false;
             alert('Произошла ошибка соединения');
         };
     }
