@@ -4,6 +4,15 @@
     const URL_SEND = 'https://us-central1-mercdev-academy.cloudfunctions.net/login';
 
     /**
+     * При нажатии на кнопку Enter запускать функцию отправки формы
+     */
+    function pressEnter(evt) {
+        if (evt.keyCode === 13) {
+            upload()
+        }
+    }
+
+    /**
      * Отправка email и password на сервер
      */
     function upload() {
@@ -78,7 +87,11 @@
     }
 
     const buttonSubmit = document.querySelector('#login');
-    buttonSubmit.addEventListener('mouseup', upload);
     const inputEmail = document.querySelector('#email');
+    const inputPassword = document.querySelector('#password');
+
+    buttonSubmit.addEventListener('mouseup', upload);
+    buttonSubmit.addEventListener('keydown', pressEnter)
     inputEmail.addEventListener('focus', removeClass);
+    inputPassword.addEventListener('keydown', pressEnter);
 })();

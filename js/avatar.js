@@ -2,6 +2,15 @@
 
 (function () {
     /**
+     * При нажатии на кнопку Enter выходить из профиля
+     */
+    function pressEnter(evt) {
+        if (evt.keyCode === 13) {
+            logout()
+        }
+    }
+
+    /**
      * Установка имени и аватрки, по данным, которые пришли с сервера
      * @param name имя юзера
      * @param url аватарка юзера
@@ -25,4 +34,5 @@
     setLoginInfo(localStorage.getItem('nameUser'), localStorage.getItem('imgUser'));
     const logoutButton = document.querySelector('#logout');
     logoutButton.addEventListener('mouseup', logout);
+    logoutButton.addEventListener('keydown', pressEnter);
 })();

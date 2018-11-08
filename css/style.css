@@ -134,7 +134,8 @@ body {
     margin-top: 40px;
 }
 
-.block__button:hover {
+.block__button:hover,
+.block__button:focus {
     background-color: #ffffff;
     -webkit-box-shadow: 0 6px 20px 0px rgba(237, 65, 89, 0.4);
     box-shadow: 0 6px 20px 0px rgba(237, 65, 89, 0.4);
