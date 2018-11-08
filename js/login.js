@@ -2,6 +2,8 @@
 
 (function () {
     const URL_SEND = 'https://us-central1-mercdev-academy.cloudfunctions.net/login';
+    const SERVER_ERROR = 500;
+    const REQUEST_ERROR = 400;
 
     /**
      * При нажатии на кнопку Enter запускать функцию отправки формы
@@ -46,8 +48,14 @@
             alert('Произошла ошибка соединения');
         };
 
-        if (xhr.status !== 200) {
-            alert('Статус ответа: ' + xhr.status + ' ' + xhr.statusText);
+        if (xhr.status === REQUEST_ERROR) {
+            buttonSubmit.disabled = false;
+            alert('Неверный запрос');
+        }
+
+        if (xhr.status === SERVER_ERROR) {
+            buttonSubmit.disabled = false;
+            alert('Внутренняя ошибка сервера');
         }
     }
 
