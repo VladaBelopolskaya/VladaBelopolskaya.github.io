@@ -45,6 +45,10 @@
             buttonSubmit.disabled = false;
             alert('Произошла ошибка соединения');
         };
+
+        if (xhr.status !== 200) {
+            alert('Статус ответа: ' + xhr.status + ' ' + xhr.statusText);
+        }
     }
 
     /**
