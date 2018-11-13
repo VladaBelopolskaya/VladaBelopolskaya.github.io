@@ -11,7 +11,7 @@
    */
   function upload(evt) {
     evt.preventDefault();
-    buttonSubmit.disabled = true;
+    form.disabled = true;
     removeError();
 
     const xhr = new XMLHttpRequest();
@@ -27,7 +27,7 @@
 
     xhr.onload = function() {
       if (xhr.response.error) {
-        buttonSubmit.disabled = false;
+        form.disabled = false;
         errorLogin();
         errorEmail();
       } else {
@@ -37,17 +37,17 @@
       }
     };
     xhr.onerror = function() {
-      buttonSubmit.disabled = false;
+      form.disabled = false;
       alert("Произошла ошибка соединения");
     };
 
     if (xhr.status === REQUEST_ERROR) {
-      buttonSubmit.disabled = false;
+      form.disabled = false;
       alert("Неверный запрос");
     }
 
     if (xhr.status === SERVER_ERROR) {
-      buttonSubmit.disabled = false;
+      form.disabled = false;
       alert("Внутренняя ошибка сервера");
     }
   }

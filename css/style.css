@@ -111,6 +111,11 @@ body {
   border-radius: 4px;
 }
 
+.block__form-logout {
+  width: 154px;
+  margin: 0 auto;
+}
+
 .block__button {
   outline: none;
   cursor: pointer;

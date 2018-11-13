@@ -2,15 +2,6 @@
 
 (function() {
   /**
-   * При нажатии на кнопку Enter выходить из профиля
-   */
-  function pressEnter(evt) {
-    if (evt.keyCode === 13) {
-      logout();
-    }
-  }
-
-  /**
    * Установка имени и аватрки, по данным, которые пришли с сервера
    * @param name имя юзера
    * @param url аватарка юзера
@@ -25,7 +16,8 @@
   /**
    * Очищение localStorage и переход на страницу авторизации
    */
-  function logout() {
+  function logout(evt) {
+    evt.preventDefault();
     document.location.href = "index.html";
     localStorage.removeItem("nameUser");
     localStorage.removeItem("imgUser");
@@ -35,7 +27,7 @@
     localStorage.getItem("nameUser"),
     localStorage.getItem("imgUser")
   );
-  const logoutButton = document.querySelector("#logout");
-  logoutButton.addEventListener("mouseup", logout);
-  logoutButton.addEventListener("keydown", pressEnter);
+
+  const form = document.querySelector("#form-logout");
+  form.addEventListener("submit", logout);
 })();
