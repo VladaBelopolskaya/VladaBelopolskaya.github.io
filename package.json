@@ -1,0 +1,24 @@
+{
+  "name": "vladabelopolskaya.github.io",
+  "version": "1.0.0",
+  "description": "Для запуска перейти по ссылке https://vladabelopolskaya.github.io",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/VladaBelopolskaya/VladaBelopolskaya.github.io.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/VladaBelopolskaya/VladaBelopolskaya.github.io/issues"
+  },
+  "homepage": "https://github.com/VladaBelopolskaya/VladaBelopolskaya.github.io#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.1.5",
+    "@babel/core": "^7.1.6",
+    "@babel/plugin-transform-react-jsx": "^7.1.6"
+  }
+}

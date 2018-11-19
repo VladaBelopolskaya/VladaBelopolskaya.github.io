@@ -1,37 +1,47 @@
 <!DOCTYPE html>
 <html lang="ru">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <title>Mercury</title>
-    <link rel="preload" href="fonts/Gotham-Bold.woff" as="font" />
-    <link rel="preload" href="fonts/Gotham-Medium.woff" as="font" />
-    <link href="css/normalize.css" rel="stylesheet" />
-    <link href="css/style.min.css" rel="stylesheet" />
-  </head>
-  <body>
-    <img class="logo" alt="logo" src="img/logo.svg" />
-    <section class="block">
-      <h2 class="block__text block__text--title">Log In</h2>
-      <form class="block__form" id="form" method="post">
-        <input
-          class="block__input"
-          name="email"
-          id="email"
-          type="email"
-          placeholder="E-Mail"
-        />
-        <input
-          class="block__input"
-          name="password"
-          id="password"
-          type="password"
-          placeholder="Password"
-        />
-        <button class="block__button" id="login" type="submit">Login</button>
-      </form>
-    </section>
+    <link rel="preload" href="fonts/Gotham-Bold.woff" as="font"/>
+    <link rel="preload" href="fonts/Gotham-Medium.woff" as="font"/>
+    <link href="css/normalize.css" rel="stylesheet"/>
+    <link href="css/style.min.css" rel="stylesheet"/>
+</head>
+<body>
+<div id="root"></div>
 
-    <script src="js/login.js"></script>
-  </body>
+<!--<img class="logo" alt="logo" src="img/logo.svg"/>-->
+<!--<section class="block">-->
+    <!--<h2 class="block__text block__text&#45;&#45;title">Log In</h2>-->
+    <!--<form class="block__form" id="form" method="post">-->
+        <!--<input-->
+                <!--class="block__input"-->
+                <!--name="email"-->
+                <!--id="email"-->
+                <!--type="email"-->
+                <!--placeholder="E-Mail"-->
+        <!--/>-->
+        <!--<input-->
+                <!--class="block__input"-->
+                <!--name="password"-->
+                <!--id="password"-->
+                <!--type="password"-->
+                <!--placeholder="Password"-->
+        <!--/>-->
+        <!--<button class="block__button" id="login" type="submit">Login</button>-->
+    <!--</form>-->
+<!--</section>-->
+
+<script
+        src="https://unpkg.com/react@16/umd/react.development.js"
+        crossorigin
+></script>
+<script
+        src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"
+        crossorigin
+></script>
+<script src="app.js"></script>
+</body>
 </html>
