@@ -7,19 +7,56 @@ class App extends React.Component {
     super(props);
 
     this.state = {
+      disabledForm: false,
+      userName: null,
+      photo: null
+    };
+
+    this.putDataToState = this.putDataToState.bind(this);
+  }
+
+  putDataToState(userName, photo) {
+    this.setState({
+      userName: userName,
+      photo: photo
+    });
+  }
+
+  render() {
+    return (
+      <div>
+        <img className="logo" alt="logo" src="img/logo.svg" />
+        <section className="block">
+          {!this.state.photo && !this.state.userName && (
+            <Login func={this.putDataToState} />
+          )}
+          {this.state.photo && this.state.userName && (
+            <Logout
+              func={this.putDataToState}
+              photo={this.state.photo}
+              userName={this.state.userName}
+            />
+          )}
+        </section>
+      </div>
+    );
+  }
+}
+
+class Login extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
       email: "user@example.com",
       password: "mercdev",
       disabledForm: false,
-      errorLogin: false,
-      succesLogin: false,
-      userName: null,
-      photo: null
+      errorLogin: false
     };
 
     this.uploadData = this.uploadData.bind(this);
     this.handleChangeEmail = this.handleChangeEmail.bind(this);
     this.handleChangePassword = this.handleChangePassword.bind(this);
-    this.logOut = this.logOut.bind(this);
   }
 
   handleChangeEmail(e) {
@@ -31,12 +68,6 @@ class App extends React.Component {
   handleChangePassword(e) {
     this.setState({
       password: e.target.value
-    });
-  }
-
-  logOut() {
-    this.setState({
-      succesLogin: false
     });
   }
 
@@ -66,11 +97,9 @@ class App extends React.Component {
           password: ""
         });
       } else {
+        this.props.func(xhr.response.name, xhr.response.photoUrl);
         this.setState({
-          succesLogin: true,
-          errorLogin: false,
-          userName: xhr.response.name,
-          photo: xhr.response.photoUrl
+          errorLogin: false
         });
       }
     };
@@ -99,78 +128,79 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        <img className="logo" alt="logo" src="img/logo.svg" />
+        <h2 className="block__text block__text--title">Log In</h2>
+        <form
+          className="block__form"
+          id="form"
+          method="post"
+          onSubmit={this.uploadData}
+        >
+          <input
+            className="block__input"
+            name="email"
+            id="email"
+            type="email"
+            placeholder="E-Mail"
+            onChange={this.handleChangeEmail}
+            value={this.state.email}
+          />
+          <input
+            className="block__input"
+            name="password"
+            id="password"
+            type="password"
+            placeholder="Password"
+            onChange={this.handleChangePassword}
+            value={this.state.password}
+          />
+          {this.state.errorLogin && (
+            <p className="block__error">E-Mail or password is incorrect</p>
+          )}
+          <button className="block__button" id="login" type="submit">
+            Login
+          </button>
+        </form>
+      </div>
+    );
+  }
+}
 
-        <section className="block">
-          {!this.state.succesLogin && (
-            <div>
-              <h2 className="block__text block__text--title">Log In</h2>
-              <form
-                className="block__form"
-                id="form"
-                method="post"
-                onSubmit={this.uploadData}
-              >
-                <input
-                  className={
-                    this.state.errorLogin
-                      ? "block__input block__input--error"
-                      : "block__input"
-                  }
-                  name="email"
-                  id="email"
-                  type="email"
-                  placeholder="E-Mail"
-                  onChange={this.handleChangeEmail}
-                  value={this.state.email}
-                />
-                <input
-                  className="block__input"
-                  name="password"
-                  id="password"
-                  type="password"
-                  placeholder="Password"
-                  onChange={this.handleChangePassword}
-                  value={this.state.password}
-                />
-                {this.state.errorLogin && (
-                  <p className="block__error">
-                    E-Mail or password is incorrect
-                  </p>
-                )}
-                <button className="block__button" id="login" type="submit">
-                  Login
-                </button>
-              </form>
-            </div>
-          )}
-          {this.state.succesLogin && (
-            <div>
-              <img
-                className="block__avatar"
-                id="img"
-                alt="avatar"
-                src={this.state.photo}
-              />
-              <p className="block__text block__text--name" id="user">
-                {this.state.userName}
-              </p>
-              <form
-                className="block__form-logout"
-                id="form-logout"
-                onSubmit={this.logOut}
-              >
-                <button
-                  className="block__button block__button--logout"
-                  id="logout"
-                  type="submit"
-                >
-                  Logout
-                </button>
-              </form>
-            </div>
-          )}
-        </section>
+class Logout extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.logOut = this.logOut.bind(this);
+  }
+
+  logOut() {
+    this.props.func(null, null);
+  }
+
+  render() {
+    return (
+      <div>
+        <img
+          className="block__avatar"
+          id="img"
+          alt="avatar"
+          src={this.props.photo}
+        />
+        <p className="block__text block__text--name" id="user">
+          {this.props.userName}
+        </p>
+        <form
+          className="block__form-logout"
+          id="form-logout"
+          onSubmit={this.logOut}
+        >
+          <button
+            className="block__button block__button--logout"
+            id="logout"
+            type="submit"
+          >
+            Logout
+          </button>
+        </form>
       </div>
     );
   }

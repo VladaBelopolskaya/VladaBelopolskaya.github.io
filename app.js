@@ -6,18 +6,50 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      disabledForm: false,
+      userName: null,
+      photo: null
+    };
+    this.putDataToState = this.putDataToState.bind(this);
+  }
+
+  putDataToState(userName, photo) {
+    this.setState({
+      userName: userName,
+      photo: photo
+    });
+  }
+
+  render() {
+    return React.createElement("div", null, React.createElement("img", {
+      className: "logo",
+      alt: "logo",
+      src: "img/logo.svg"
+    }), React.createElement("section", {
+      className: "block"
+    }, !this.state.photo && !this.state.userName && React.createElement(Login, {
+      func: this.putDataToState
+    }), this.state.photo && this.state.userName && React.createElement(Logout, {
+      func: this.putDataToState,
+      photo: this.state.photo,
+      userName: this.state.userName
+    })));
+  }
+
+}
+
+class Login extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
       email: "user@example.com",
       password: "mercdev",
       disabledForm: false,
-      errorLogin: false,
-      succesLogin: false,
-      userName: null,
-      photo: null
+      errorLogin: false
     };
     this.uploadData = this.uploadData.bind(this);
     this.handleChangeEmail = this.handleChangeEmail.bind(this);
     this.handleChangePassword = this.handleChangePassword.bind(this);
-    this.logOut = this.logOut.bind(this);
   }
 
   handleChangeEmail(e) {
@@ -29,12 +61,6 @@ class App extends React.Component {
   handleChangePassword(e) {
     this.setState({
       password: e.target.value
-    });
-  }
-
-  logOut() {
-    this.setState({
-      succesLogin: false
     });
   }
 
@@ -62,11 +88,9 @@ class App extends React.Component {
           password: ""
         });
       } else {
+        this.props.func(xhr.response.name, xhr.response.photoUrl);
         this.setState({
-          succesLogin: true,
-          errorLogin: false,
-          userName: xhr.response.name,
-          photo: xhr.response.photoUrl
+          errorLogin: false
         });
       }
     };
@@ -94,13 +118,7 @@ class App extends React.Component {
   }
 
   render() {
-    return React.createElement("div", null, React.createElement("img", {
-      className: "logo",
-      alt: "logo",
-      src: "img/logo.svg"
-    }), React.createElement("section", {
-      className: "block"
-    }, !this.state.succesLogin && React.createElement("div", null, React.createElement("h2", {
+    return React.createElement("div", null, React.createElement("h2", {
       className: "block__text block__text--title"
     }, "Log In"), React.createElement("form", {
       className: "block__form",
@@ -108,7 +126,7 @@ class App extends React.Component {
       method: "post",
       onSubmit: this.uploadData
     }, React.createElement("input", {
-      className: this.state.errorLogin ? "block__input block__input--error" : "block__input",
+      className: "block__input",
       name: "email",
       id: "email",
       type: "email",
@@ -129,15 +147,31 @@ class App extends React.Component {
       className: "block__button",
       id: "login",
       type: "submit"
-    }, "Login"))), this.state.succesLogin && React.createElement("div", null, React.createElement("img", {
+    }, "Login")));
+  }
+
+}
+
+class Logout extends React.Component {
+  constructor(props) {
+    super(props);
+    this.logOut = this.logOut.bind(this);
+  }
+
+  logOut() {
+    this.props.func(null, null);
+  }
+
+  render() {
+    return React.createElement("div", null, React.createElement("img", {
       className: "block__avatar",
       id: "img",
       alt: "avatar",
-      src: this.state.photo
+      src: this.props.photo
     }), React.createElement("p", {
       className: "block__text block__text--name",
       id: "user"
-    }, this.state.userName), React.createElement("form", {
+    }, this.props.userName), React.createElement("form", {
       className: "block__form-logout",
       id: "form-logout",
       onSubmit: this.logOut
@@ -145,7 +179,7 @@ class App extends React.Component {
       className: "block__button block__button--logout",
       id: "logout",
       type: "submit"
-    }, "Logout")))));
+    }, "Logout")));
   }
 
 }
