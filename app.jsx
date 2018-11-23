@@ -2,56 +2,15 @@ const URL_SEND = "https://us-central1-mercdev-academy.cloudfunctions.net/login";
 const SERVER_ERROR = 500;
 const REQUEST_ERROR = 400;
 
-class App extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      disabledForm: false,
-      userName: null,
-      photo: null
-    };
-
-    this.putDataToState = this.putDataToState.bind(this);
-  }
-
-  putDataToState(userName, photo) {
-    this.setState({
-      userName: userName,
-      photo: photo
-    });
-  }
-
-  render() {
-    return (
-      <div>
-        <img className="logo" alt="logo" src="img/logo.svg" />
-        <section className="block">
-          {!this.state.photo && !this.state.userName && (
-            <Login func={this.putDataToState} />
-          )}
-          {this.state.photo && this.state.userName && (
-            <Logout
-              func={this.putDataToState}
-              photo={this.state.photo}
-              userName={this.state.userName}
-            />
-          )}
-        </section>
-      </div>
-    );
-  }
-}
-
-class Login extends React.Component {
+class LoginForm extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
       email: "user@example.com",
       password: "mercdev",
-      disabledForm: false,
-      errorLogin: false
+      isFormDisabled: false,
+      isLoginError: false
     };
 
     this.uploadData = this.uploadData.bind(this);
@@ -59,22 +18,22 @@ class Login extends React.Component {
     this.handleChangePassword = this.handleChangePassword.bind(this);
   }
 
-  handleChangeEmail(e) {
+  handleChangeEmail(evt) {
     this.setState({
-      email: e.target.value
+      email: evt.target.value
     });
   }
 
-  handleChangePassword(e) {
+  handleChangePassword(evt) {
     this.setState({
-      password: e.target.value
+      password: evt.target.value
     });
   }
 
   uploadData(evt) {
     evt.preventDefault();
     this.setState({
-      errorLogin: false
+      isLoginError: false
     });
 
     const xhr = new XMLHttpRequest();
@@ -91,35 +50,35 @@ class Login extends React.Component {
     xhr.onload = () => {
       if (xhr.response.error) {
         this.setState({
-          disabledForm: false,
-          errorLogin: true,
+          isFormDisabled: false,
+          isLoginError: true,
           email: "",
           password: ""
         });
       } else {
-        this.props.func(xhr.response.name, xhr.response.photoUrl);
+        this.props.logIn(xhr.response.name, xhr.response.photoUrl);
         this.setState({
-          errorLogin: false
+          isLoginError: false
         });
       }
     };
     xhr.onerror = () => {
       this.setState({
-        disabledForm: false
+        isFormDisabled: false
       });
       alert("Произошла ошибка соединения");
     };
 
     if (xhr.status === REQUEST_ERROR) {
       this.setState({
-        disabledForm: false
+        isFormDisabled: false
       });
       alert("Неверный запрос");
     }
 
     if (xhr.status === SERVER_ERROR) {
       this.setState({
-        disabledForm: false
+        isFormDisabled: false
       });
       alert("Внутренняя ошибка сервера");
     }
@@ -165,42 +124,84 @@ class Login extends React.Component {
   }
 }
 
-class Logout extends React.Component {
+function User(props) {
+  return (
+    <div>
+      <img
+        className="block__avatar"
+        id="img"
+        alt="avatar"
+        src={props.photo}
+      />
+      <p className="block__text block__text--name" id="user">
+        {props.userName}
+      </p>
+      <form
+        className="block__form-logout"
+        id="form-logout"
+        onSubmit={props.logOut}
+      >
+        <button
+          className="block__button block__button--logout"
+          id="logout"
+          type="submit"
+        >
+          Logout
+        </button>
+      </form>
+    </div>
+  );
+}
+
+class App extends React.Component {
   constructor(props) {
     super(props);
 
-    this.logOut = this.logOut.bind(this);
+    this.state = {
+      user: {
+        userName: null,
+        photo: null
+      }
+    };
+
+    this.setUser = this.setUser.bind(this);
+    this.removeUser = this.removeUser.bind(this);
   }
 
-  logOut() {
-    this.props.func(null, null);
+  removeUser() {
+    this.setState({
+      user: {
+        userName: null,
+        photo: null
+      }
+    });
+  }
+
+  setUser(userName, photo) {
+    this.setState({
+      user: {
+        userName: userName,
+        photo: photo
+      }
+    });
   }
 
   render() {
     return (
       <div>
-        <img
-          className="block__avatar"
-          id="img"
-          alt="avatar"
-          src={this.props.photo}
-        />
-        <p className="block__text block__text--name" id="user">
-          {this.props.userName}
-        </p>
-        <form
-          className="block__form-logout"
-          id="form-logout"
-          onSubmit={this.logOut}
-        >
-          <button
-            className="block__button block__button--logout"
-            id="logout"
-            type="submit"
-          >
-            Logout
-          </button>
-        </form>
+        <img className="logo" alt="logo" src="img/logo.svg" />
+        <section className="block">
+          {!this.state.user.photo && !this.state.user.userName && (
+            <LoginForm logIn={this.setUser} />
+          )}
+          {this.state.user.photo && this.state.user.userName && (
+            <User
+              logOut={this.removeUser}
+              photo={this.state.user.photo}
+              userName={this.state.user.userName}
+            />
+          )}
+        </section>
       </div>
     );
   }
