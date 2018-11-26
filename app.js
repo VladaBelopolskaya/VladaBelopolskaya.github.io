@@ -1,6 +1,4 @@
 const URL_SEND = "https://us-central1-mercdev-academy.cloudfunctions.net/login";
-const SERVER_ERROR = 500;
-const REQUEST_ERROR = 400;
 const SUCCESS_STATUS = 200;
 
 function Button(props) {
@@ -32,10 +30,11 @@ class LoginForm extends React.Component {
       isFormDisabled: false,
       isLoginError: false
     };
-    this.uploadData = this.uploadData.bind(this);
+    this.login = this.login.bind(this);
+    this.request = this.request.bind(this);
     this.handleChangeEmail = this.handleChangeEmail.bind(this);
     this.handleChangePassword = this.handleChangePassword.bind(this);
-    this.getHttp = this.getHttp.bind(this);
+    this.setUser = this.setUser.bind(this);
   }
 
   handleChangeEmail(evt) {
@@ -50,12 +49,21 @@ class LoginForm extends React.Component {
     });
   }
 
-  getHttp(url) {
+  setUser(userName, photo) {
+    this.setState({
+      user: {
+        userName: userName,
+        photo: photo
+      }
+    });
+  }
+
+  request(url, email, password) {
     return new Promise(function (resolve, reject) {
       const xhr = new XMLHttpRequest();
       const json = {
-        email: this.state.email,
-        password: this.state.password
+        email,
+        password
       };
       xhr.responseType = "json";
       xhr.open("POST", url);
@@ -71,34 +79,27 @@ class LoginForm extends React.Component {
       };
 
       xhr.onerror = () => {
-        reject();
+        let errorText = "Произошла ошибка соединения";
+        reject(errorText);
       };
     });
   }
 
-  uploadData(evt) {
+  login(evt) {
     evt.preventDefault();
-    this.setState({
-      isLoginError: false
-    });
-    this.getHttp(URL_SEND).then(response => {
-      this.props.logIn(response.name, response.photoUrl);
+    this.request(URL_SEND, this.state.email, this.state.password).then(response => {
+      this.setUser(response.name, response.photoUrl);
       this.setState({
         isLoginError: false
       });
-    }, statusText => {
+    }).catch(text => {
       this.setState({
         isFormDisabled: false,
         isLoginError: true,
         email: "",
         password: ""
       });
-      alert(statusText);
-    }).catch(() => {
-      this.setState({
-        isFormDisabled: false
-      });
-      alert("Произошла ошибка соединения");
+      alert(text);
     });
   }
 
@@ -109,7 +110,7 @@ class LoginForm extends React.Component {
       className: "block__form",
       id: "form",
       method: "post",
-      onSubmit: this.uploadData
+      onSubmit: this.login
     }, React.createElement(Input, {
       name: "email",
       id: "email",
@@ -172,7 +173,6 @@ class App extends React.Component {
         photo: null
       }
     };
-    this.setUser = this.setUser.bind(this);
     this.removeUser = this.removeUser.bind(this);
   }
 
@@ -183,21 +183,18 @@ class App extends React.Component {
         photo: null
       }
     });
-  }
+  } // setUser(userName, photo) {
+  //   this.setState({
+  //     user: {
+  //       userName: userName,
+  //       photo: photo
+  //     }
+  //   });
+  // }
 
-  setUser(userName, photo) {
-    this.setState({
-      user: {
-        userName: userName,
-        photo: photo
-      }
-    });
-  }
 
   render() {
-    return React.createElement(Wrapper, null, !this.state.user.photo && !this.state.user.userName && React.createElement(LoginForm, {
-      logIn: this.setUser
-    }), this.state.user.photo && this.state.user.userName && React.createElement(User, {
+    return React.createElement(Wrapper, null, !this.state.user.photo && !this.state.user.userName && React.createElement(LoginForm, null), this.state.user.photo && this.state.user.userName && React.createElement(User, {
       logOut: this.removeUser,
       photo: this.state.user.photo,
       userName: this.state.user.userName
