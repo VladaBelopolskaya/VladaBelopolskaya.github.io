@@ -34,7 +34,6 @@ class LoginForm extends React.Component {
     this.request = this.request.bind(this);
     this.handleChangeEmail = this.handleChangeEmail.bind(this);
     this.handleChangePassword = this.handleChangePassword.bind(this);
-    this.setUser = this.setUser.bind(this);
   }
 
   handleChangeEmail(evt) {
@@ -46,15 +45,6 @@ class LoginForm extends React.Component {
   handleChangePassword(evt) {
     this.setState({
       password: evt.target.value
-    });
-  }
-
-  setUser(userName, photo) {
-    this.setState({
-      user: {
-        userName: userName,
-        photo: photo
-      }
     });
   }
 
@@ -72,9 +62,9 @@ class LoginForm extends React.Component {
 
       xhr.onload = () => {
         if (xhr.status === SUCCESS_STATUS) {
-          resolve(this.response);
+          resolve(xhr.response);
         } else {
-          reject(xhr.statusText);
+          reject("Произошла ошибка. Код ответа: " + xhr.status);
         }
       };
 
@@ -88,10 +78,7 @@ class LoginForm extends React.Component {
   login(evt) {
     evt.preventDefault();
     this.request(URL_SEND, this.state.email, this.state.password).then(response => {
-      this.setUser(response.name, response.photoUrl);
-      this.setState({
-        isLoginError: false
-      });
+      this.props.setUser(response.name, response.photoUrl);
     }).catch(text => {
       this.setState({
         isFormDisabled: false,
@@ -125,7 +112,7 @@ class LoginForm extends React.Component {
       placeholder: "Password",
       onChange: this.handleChangePassword,
       value: this.state.password
-    }), this.state.errorLogin && React.createElement("p", {
+    }), this.state.isLoginError && React.createElement("p", {
       className: "block__error"
     }, "E-Mail or password is incorrect"), React.createElement(Button, {
       className: "block__button",
@@ -173,6 +160,7 @@ class App extends React.Component {
         photo: null
       }
     };
+    this.setUser = this.setUser.bind(this);
     this.removeUser = this.removeUser.bind(this);
   }
 
@@ -183,18 +171,21 @@ class App extends React.Component {
         photo: null
       }
     });
-  } // setUser(userName, photo) {
-  //   this.setState({
-  //     user: {
-  //       userName: userName,
-  //       photo: photo
-  //     }
-  //   });
-  // }
+  }
 
+  setUser(userName, photo) {
+    this.setState({
+      user: {
+        userName: userName,
+        photo: photo
+      }
+    });
+  }
 
   render() {
-    return React.createElement(Wrapper, null, !this.state.user.photo && !this.state.user.userName && React.createElement(LoginForm, null), this.state.user.photo && this.state.user.userName && React.createElement(User, {
+    return React.createElement(Wrapper, null, !this.state.user.photo && !this.state.user.userName && React.createElement(LoginForm, {
+      setUser: this.setUser
+    }), this.state.user.photo && this.state.user.userName && React.createElement(User, {
       logOut: this.removeUser,
       photo: this.state.user.photo,
       userName: this.state.user.userName

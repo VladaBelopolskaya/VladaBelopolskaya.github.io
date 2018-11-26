@@ -40,7 +40,6 @@ class LoginForm extends React.Component {
     this.request = this.request.bind(this);
     this.handleChangeEmail = this.handleChangeEmail.bind(this);
     this.handleChangePassword = this.handleChangePassword.bind(this);
-    this.setUser = this.setUser.bind(this);
   }
 
   handleChangeEmail(evt) {
@@ -52,15 +51,6 @@ class LoginForm extends React.Component {
   handleChangePassword(evt) {
     this.setState({
       password: evt.target.value
-    });
-  }
-
-  setUser(userName, photo) {
-    this.setState({
-      user: {
-        userName: userName,
-        photo: photo
-      }
     });
   }
 
@@ -79,9 +69,9 @@ class LoginForm extends React.Component {
 
       xhr.onload = () => {
         if (xhr.status === SUCCESS_STATUS) {
-          resolve(this.response);
+          resolve(xhr.response);
         } else {
-          reject(xhr.statusText);
+          reject("Произошла ошибка. Код ответа: " + xhr.status);
         }
       };
       xhr.onerror = () => {
@@ -95,10 +85,7 @@ class LoginForm extends React.Component {
     evt.preventDefault();
     this.request(URL_SEND, this.state.email, this.state.password)
       .then(response => {
-        this.setUser(response.name, response.photoUrl);
-        this.setState({
-          isLoginError: false
-        });
+        this.props.setUser(response.name, response.photoUrl);
       })
       .catch(text => {
         this.setState({
@@ -137,7 +124,7 @@ class LoginForm extends React.Component {
             onChange={this.handleChangePassword}
             value={this.state.password}
           />
-          {this.state.errorLogin && (
+          {this.state.isLoginError && (
             <p className="block__error">E-Mail or password is incorrect</p>
           )}
           <Button className="block__button" id="login">
@@ -189,6 +176,7 @@ class App extends React.Component {
       }
     };
 
+    this.setUser = this.setUser.bind(this);
     this.removeUser = this.removeUser.bind(this);
   }
 
@@ -201,20 +189,20 @@ class App extends React.Component {
     });
   }
 
-  // setUser(userName, photo) {
-  //   this.setState({
-  //     user: {
-  //       userName: userName,
-  //       photo: photo
-  //     }
-  //   });
-  // }
+  setUser(userName, photo) {
+    this.setState({
+      user: {
+        userName: userName,
+        photo: photo
+      }
+    });
+  }
 
   render() {
     return (
       <Wrapper>
         {!this.state.user.photo && !this.state.user.userName && (
-          <LoginForm />
+          <LoginForm setUser={this.setUser}/>
         )}
         {this.state.user.photo && this.state.user.userName && (
           <User
