@@ -1,6 +1,31 @@
 const URL_SEND = "https://us-central1-mercdev-academy.cloudfunctions.net/login";
 const SERVER_ERROR = 500;
 const REQUEST_ERROR = 400;
+const SUCCESS_STATUS = 200;
+
+function Button(props) {
+  return (
+    <button className={props.className} id={props.id} type="submit">
+      {props.children}
+    </button>
+  );
+}
+
+function Input(props) {
+  return (
+    <div>
+      <input
+        className="block__input"
+        name={props.name}
+        id={props.id}
+        type={props.type}
+        placeholder={props.placeholder}
+        onChange={props.onChange}
+        value={props.value}
+      />
+    </div>
+  );
+}
 
 class LoginForm extends React.Component {
   constructor(props) {
@@ -16,6 +41,7 @@ class LoginForm extends React.Component {
     this.uploadData = this.uploadData.bind(this);
     this.handleChangeEmail = this.handleChangeEmail.bind(this);
     this.handleChangePassword = this.handleChangePassword.bind(this);
+    this.getHttp = this.getHttp.bind(this);
   }
 
   handleChangeEmail(evt) {
@@ -30,58 +56,62 @@ class LoginForm extends React.Component {
     });
   }
 
+  getHttp(url) {
+    return new Promise(function(resolve, reject) {
+      const xhr = new XMLHttpRequest();
+      const json = {
+        email: this.state.email,
+        password: this.state.password
+      };
+
+      xhr.responseType = "json";
+      xhr.open("POST", url);
+      xhr.setRequestHeader("Content-Type", "application/json");
+      xhr.send(JSON.stringify(json));
+
+      xhr.onload = () => {
+        if (xhr.status === SUCCESS_STATUS) {
+          resolve(this.response);
+        } else {
+          reject(xhr.statusText);
+        }
+      };
+      xhr.onerror = () => {
+        reject();
+      };
+    });
+  }
+
   uploadData(evt) {
     evt.preventDefault();
     this.setState({
       isLoginError: false
     });
 
-    const xhr = new XMLHttpRequest();
-    const json = {
-      email: this.state.email,
-      password: this.state.password
-    };
-
-    xhr.responseType = "json";
-    xhr.open("POST", URL_SEND);
-    xhr.setRequestHeader("Content-Type", "application/json");
-    xhr.send(JSON.stringify(json));
-
-    xhr.onload = () => {
-      if (xhr.response.error) {
+    this.getHttp(URL_SEND)
+      .then(
+        response => {
+          this.props.logIn(response.name, response.photoUrl);
+          this.setState({
+            isLoginError: false
+          });
+        },
+        statusText => {
+          this.setState({
+            isFormDisabled: false,
+            isLoginError: true,
+            email: "",
+            password: ""
+          });
+          alert(statusText);
+        }
+      )
+      .catch(() => {
         this.setState({
-          isFormDisabled: false,
-          isLoginError: true,
-          email: "",
-          password: ""
+          isFormDisabled: false
         });
-      } else {
-        this.props.logIn(xhr.response.name, xhr.response.photoUrl);
-        this.setState({
-          isLoginError: false
-        });
-      }
-    };
-    xhr.onerror = () => {
-      this.setState({
-        isFormDisabled: false
+        alert("Произошла ошибка соединения");
       });
-      alert("Произошла ошибка соединения");
-    };
-
-    if (xhr.status === REQUEST_ERROR) {
-      this.setState({
-        isFormDisabled: false
-      });
-      alert("Неверный запрос");
-    }
-
-    if (xhr.status === SERVER_ERROR) {
-      this.setState({
-        isFormDisabled: false
-      });
-      alert("Внутренняя ошибка сервера");
-    }
   }
 
   render() {
@@ -94,8 +124,7 @@ class LoginForm extends React.Component {
           method="post"
           onSubmit={this.uploadData}
         >
-          <input
-            className="block__input"
+          <Input
             name="email"
             id="email"
             type="email"
@@ -103,8 +132,7 @@ class LoginForm extends React.Component {
             onChange={this.handleChangeEmail}
             value={this.state.email}
           />
-          <input
-            className="block__input"
+          <Input
             name="password"
             id="password"
             type="password"
@@ -115,9 +143,9 @@ class LoginForm extends React.Component {
           {this.state.errorLogin && (
             <p className="block__error">E-Mail or password is incorrect</p>
           )}
-          <button className="block__button" id="login" type="submit">
+          <Button className="block__button" id="login">
             Login
-          </button>
+          </Button>
         </form>
       </div>
     );
@@ -127,12 +155,7 @@ class LoginForm extends React.Component {
 function User(props) {
   return (
     <div>
-      <img
-        className="block__avatar"
-        id="img"
-        alt="avatar"
-        src={props.photo}
-      />
+      <img className="block__avatar" id="img" alt="avatar" src={props.photo} />
       <p className="block__text block__text--name" id="user">
         {props.userName}
       </p>
@@ -141,16 +164,23 @@ function User(props) {
         id="form-logout"
         onSubmit={props.logOut}
       >
-        <button
-          className="block__button block__button--logout"
-          id="logout"
-          type="submit"
-        >
+        <Button className="block__button block__button--logout" id="login">
           Logout
-        </button>
+        </Button>
       </form>
     </div>
   );
+}
+
+function Wrapper(props) {
+  return (
+    <div>
+      <img className="logo" alt="logo" src="img/logo.svg" />
+      <section className="block">
+        {props.children}
+      </section>
+    </div>
+  )
 }
 
 class App extends React.Component {
@@ -188,21 +218,18 @@ class App extends React.Component {
 
   render() {
     return (
-      <div>
-        <img className="logo" alt="logo" src="img/logo.svg" />
-        <section className="block">
-          {!this.state.user.photo && !this.state.user.userName && (
-            <LoginForm logIn={this.setUser} />
-          )}
-          {this.state.user.photo && this.state.user.userName && (
-            <User
-              logOut={this.removeUser}
-              photo={this.state.user.photo}
-              userName={this.state.user.userName}
-            />
-          )}
-        </section>
-      </div>
+      <Wrapper>
+        {!this.state.user.photo && !this.state.user.userName && (
+          <LoginForm logIn={this.setUser} />
+        )}
+        {this.state.user.photo && this.state.user.userName && (
+          <User
+            logOut={this.removeUser}
+            photo={this.state.user.photo}
+            userName={this.state.user.userName}
+          />
+        )}
+      </Wrapper>
     );
   }
 }
