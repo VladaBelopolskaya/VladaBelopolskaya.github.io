@@ -1,30 +1,6 @@
 const URL_SEND = "https://us-central1-mercdev-academy.cloudfunctions.net/login";
 const SUCCESS_STATUS = 200;
 
-function Button(props) {
-  return (
-    <button className={props.className} id={props.id} type="submit">
-      {props.children}
-    </button>
-  );
-}
-
-function Input(props) {
-  return (
-    <div>
-      <input
-        className="block__input"
-        name={props.name}
-        id={props.id}
-        type={props.type}
-        placeholder={props.placeholder}
-        onChange={props.onChange}
-        value={props.value}
-      />
-    </div>
-  );
-}
-
 class LoginForm extends React.Component {
   constructor(props) {
     super(props);
@@ -55,7 +31,7 @@ class LoginForm extends React.Component {
   }
 
   request(url, email, password) {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
       const xhr = new XMLHttpRequest();
       const json = {
         email,
@@ -135,85 +111,3 @@ class LoginForm extends React.Component {
     );
   }
 }
-
-function User(props) {
-  return (
-    <div>
-      <img className="block__avatar" id="img" alt="avatar" src={props.photo} />
-      <p className="block__text block__text--name" id="user">
-        {props.userName}
-      </p>
-      <form
-        className="block__form-logout"
-        id="form-logout"
-        onSubmit={props.logOut}
-      >
-        <Button className="block__button block__button--logout" id="login">
-          Logout
-        </Button>
-      </form>
-    </div>
-  );
-}
-
-function Wrapper(props) {
-  return (
-    <div>
-      <img className="logo" alt="logo" src="img/logo.svg" />
-      <section className="block">{props.children}</section>
-    </div>
-  );
-}
-
-class App extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      user: {
-        userName: null,
-        photo: null
-      }
-    };
-
-    this.setUser = this.setUser.bind(this);
-    this.removeUser = this.removeUser.bind(this);
-  }
-
-  removeUser() {
-    this.setState({
-      user: {
-        userName: null,
-        photo: null
-      }
-    });
-  }
-
-  setUser(userName, photo) {
-    this.setState({
-      user: {
-        userName: userName,
-        photo: photo
-      }
-    });
-  }
-
-  render() {
-    return (
-      <Wrapper>
-        {!this.state.user.photo && !this.state.user.userName && (
-          <LoginForm setUser={this.setUser}/>
-        )}
-        {this.state.user.photo && this.state.user.userName && (
-          <User
-            logOut={this.removeUser}
-            photo={this.state.user.photo}
-            userName={this.state.user.userName}
-          />
-        )}
-      </Wrapper>
-    );
-  }
-}
-
-ReactDOM.render(<App />, document.getElementById("root"));
