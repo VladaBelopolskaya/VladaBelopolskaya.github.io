@@ -1,10 +1,54 @@
+import React from 'react';
 import Button from './button.jsx';
 import Input from './input.jsx';
-import styles from '../../assets/css/style.css'
-
+import styled from 'styled-components';
 
 const URL_SEND = "https://us-central1-mercdev-academy.cloudfunctions.net/login";
 const SUCCESS_STATUS = 200;
+
+const H2 = styled.h2`
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 20px;
+  margin-bottom: 32px;
+
+  @media (min-width: 660px) {
+    font-size: 24px;
+    line-height: 24px;
+    margin-bottom: 48px;
+  }
+`;
+
+const Form = styled.form`
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  flex-direction: column;
+`;
+
+const P = styled.p`
+margin: 0 0 24px 0;
+  padding: 16px 0 12px 16px;
+  font-size: 12px;
+  line-height: 12px;
+  color: #ed4159;
+  font-weight: 500;
+  background-color: rgba(237, 65, 89, 0.25);
+  border-radius: 4px;
+
+  @media (min-width: 660px) {
+    padding: 14px 0 13px 16px;
+    font-size: 14px;
+    line-height: 14px;
+    margin-bottom: 30px;
+  }
+`;
 
 class LoginForm extends React.Component {
   constructor(props) {
@@ -80,12 +124,10 @@ class LoginForm extends React.Component {
   }
 
   render() {
-    console.log('123');
     return (
       <div>
-        <h2 className={`${styles.block__text} ${styles['block__text--title']}`}>Log In</h2>
-        <form
-          className={styles.block__form}
+        <H2>Log In</H2>
+        <Form
           id="form"
           method="post"
           onSubmit={this.login}
@@ -107,12 +149,12 @@ class LoginForm extends React.Component {
             value={this.state.password}
           />
           {this.state.isLoginError && (
-            <p className={styles.block__error}>E-Mail or password is incorrect</p>
+            <P>E-Mail or password is incorrect</P>
           )}
-          <Button className={styles.block__button} id="login">
+          <Button id="login">
             Login
           </Button>
-        </form>
+        </Form>
       </div>
     );
   }
