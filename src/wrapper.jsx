@@ -6,3 +6,5 @@ function Wrapper(props) {
     </div>
   );
 }
+
+export default Wrapper;

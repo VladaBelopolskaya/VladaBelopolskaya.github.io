@@ -1,3 +1,7 @@
+import Wrapper from './wrapper.jsx';
+import LoginForm from './login-form.jsx';
+import User from './user.jsx';
+
 class App extends React.Component {
   constructor(props) {
     super(props);

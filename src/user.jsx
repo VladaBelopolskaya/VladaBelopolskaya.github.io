@@ -1,3 +1,5 @@
+import Button from './button.jsx';
+
 function User(props) {
   return (
     <div>
@@ -17,3 +19,5 @@ function User(props) {
     </div>
   );
 }
+
+export default User;
