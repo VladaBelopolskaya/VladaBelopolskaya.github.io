@@ -1,5 +1,6 @@
 import Button from './button.jsx';
-import styles from '../css/style.css';
+import styles from '../../assets/css/style.css'
+
 
 function User(props) {
   return (

@@ -1,4 +1,4 @@
-import styles from '../css/style.css'
+import styles from '../../assets/css/style.css'
 
 function Wrapper(props) {
   console.log(styles);
@@ -6,7 +6,7 @@ function Wrapper(props) {
 
   return (
     <div>
-      <img className={styles.logo} alt="logo" src="img/logo.svg" />
+      <img className={styles.logo} alt="logo" src="assets/img/logo.svg" />
       <section className={styles.block}>{props.children}</section>
     </div>
   );

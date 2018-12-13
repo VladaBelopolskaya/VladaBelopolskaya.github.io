@@ -1,6 +1,7 @@
 import Button from './button.jsx';
-import Input from './input.jsx'
-import styles from '../css/style.css';
+import Input from './input.jsx';
+import styles from '../../assets/css/style.css'
+
 
 const URL_SEND = "https://us-central1-mercdev-academy.cloudfunctions.net/login";
 const SUCCESS_STATUS = 200;
