@@ -1,6 +1,5 @@
-import Button from './button.jsx';
-import styles from '../../assets/css/style.css'
-
+import Button from '../button/button.jsx';
+import styles from './style.css'
 
 function User(props) {
   return (
@@ -14,7 +13,7 @@ function User(props) {
         id="form-logout"
         onSubmit={props.logOut}
       >
-        <Button className={`${styles.block__button} ${styles['block__button--logout']}`} id="login">
+        <Button logout id="login">
           Logout
         </Button>
       </form>

@@ -1,0 +1,40 @@
+.block__text {
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 20px;
+}
+
+.block__text--name {
+  margin: 24px 0 0 0;
+  font-size: 18px;
+  line-height: 18px;
+}
+
+.block__form-logout {
+  width: 154px;
+  margin: 0 auto;
+}
+
+.block__avatar {
+  display: block;
+  margin: 0 auto;
+  border-radius: 64px;
+  width: 86px;
+  height: 86px;
+}
+
+@media (min-width: 660px) {
+  .block__text--name {
+    margin: 45px 0 8px 0;
+    font-size: 28px;
+    line-height: 28px;
+  }
+
+  .block__avatar {
+    width: 128px;
+    height: 128px;
+  }
+}

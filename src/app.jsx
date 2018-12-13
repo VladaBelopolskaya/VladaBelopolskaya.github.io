@@ -1,7 +1,8 @@
-import Wrapper from './components/wrapper.jsx';
-import LoginForm from './components/login-form.jsx';
-import User from './components/user.jsx';
+import Wrapper from './components/wrapper/wrapper.jsx';
+import LoginForm from './components/login-form/login-form.jsx';
+import User from './components/user/user.jsx';
 import '../assets/css/normalize.css';
+import './style.css';
 
 class App extends React.Component {
   constructor(props) {
@@ -37,7 +38,6 @@ class App extends React.Component {
   }
 
   render() {
-    console.log(this.state, '567');
     return (
       <Wrapper>
         {!this.state.user.photo && !this.state.user.userName && (

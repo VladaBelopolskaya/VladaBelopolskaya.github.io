@@ -1,4 +1,4 @@
-import styles from '../../assets/css/style.css';
+import styles from './style.css';
 
 
 function Input(props) {

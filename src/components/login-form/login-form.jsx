@@ -1,6 +1,6 @@
-import Button from './button.jsx';
-import Input from './input.jsx';
-import styles from '../../assets/css/style.css'
+import Button from '../button/button.jsx';
+import Input from '../input/input.jsx';
+import styles from './style.css'
 
 
 const URL_SEND = "https://us-central1-mercdev-academy.cloudfunctions.net/login";
@@ -80,7 +80,6 @@ class LoginForm extends React.Component {
   }
 
   render() {
-    console.log('123');
     return (
       <div>
         <h2 className={`${styles.block__text} ${styles['block__text--title']}`}>Log In</h2>
@@ -109,7 +108,7 @@ class LoginForm extends React.Component {
           {this.state.isLoginError && (
             <p className={styles.block__error}>E-Mail or password is incorrect</p>
           )}
-          <Button className={styles.block__button} id="login">
+          <Button id="login">
             Login
           </Button>
         </form>
