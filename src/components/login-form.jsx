@@ -1,5 +1,6 @@
 import Button from './button.jsx';
 import Input from './input.jsx'
+import styles from '../css/style.css';
 
 const URL_SEND = "https://us-central1-mercdev-academy.cloudfunctions.net/login";
 const SUCCESS_STATUS = 200;
@@ -78,11 +79,12 @@ class LoginForm extends React.Component {
   }
 
   render() {
+    console.log('123');
     return (
       <div>
-        <h2 className="block__text block__text--title">Log In</h2>
+        <h2 className={`${styles.block__text} ${styles['block__text--title']}`}>Log In</h2>
         <form
-          className="block__form"
+          className={styles.block__form}
           id="form"
           method="post"
           onSubmit={this.login}
@@ -104,9 +106,9 @@ class LoginForm extends React.Component {
             value={this.state.password}
           />
           {this.state.isLoginError && (
-            <p className="block__error">E-Mail or password is incorrect</p>
+            <p className={styles.block__error}>E-Mail or password is incorrect</p>
           )}
-          <Button className="block__button" id="login">
+          <Button className={styles.block__button} id="login">
             Login
           </Button>
         </form>
