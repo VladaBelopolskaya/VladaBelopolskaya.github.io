@@ -1,7 +1,7 @@
 import Wrapper from './components/wrapper/wrapper.jsx';
 import LoginForm from './components/login-form/login-form.jsx';
 import User from './components/user/user.jsx';
-import '../assets/css/normalize.css';
+import './normalize.css';
 import './style.css';
 
 class App extends React.Component {
