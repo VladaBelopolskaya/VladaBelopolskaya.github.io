@@ -1,6 +1,11 @@
 import Button from '../button/button.jsx';
 import Input from '../input/input.jsx';
-import styles from './style.css'
+import styles from './style.css';
+import {
+  BrowserRouter as Router,
+  Route,
+  Redirect
+} from "react-router-dom";
 
 
 const URL_SEND = "https://us-central1-mercdev-academy.cloudfunctions.net/login";
@@ -80,6 +85,10 @@ class LoginForm extends React.Component {
   }
 
   render() {
+    console.log(this.props.user)
+    if (this.props.user.userName !== null) return (
+      <Redirect to='/user' />
+    );
     return (
       <div>
         <h2 className={`${styles.block__text} ${styles['block__text--title']}`}>Log In</h2>
