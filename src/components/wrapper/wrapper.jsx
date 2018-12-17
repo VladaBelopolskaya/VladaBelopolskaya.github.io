@@ -1,4 +1,5 @@
-import styles from './style.css'
+import React from "react";
+import styles from "./style.css";
 
 function Wrapper(props) {
   return (

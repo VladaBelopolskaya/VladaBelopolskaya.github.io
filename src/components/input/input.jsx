@@ -1,13 +1,10 @@
-import styles from './style.css';
-
+import React from "react";
+import styles from "./style.css";
 
 function Input(props) {
   return (
     <div>
-      <input
-        className={styles.block__input}
-        {...props}
-      />
+      <input className={styles.block__input} {...props} />
     </div>
   );
 }

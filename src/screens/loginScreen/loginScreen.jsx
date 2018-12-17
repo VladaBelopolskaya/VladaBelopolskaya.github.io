@@ -1,17 +1,12 @@
-import Button from '../button/button.jsx';
-import Input from '../input/input.jsx';
-import styles from './style.css';
-import {
-  BrowserRouter as Router,
-  Route,
-  Redirect
-} from "react-router-dom";
-
+import React from "react";
+import Button from "../../components/button/button.jsx";
+import Input from "../../components/input/input.jsx";
+import styles from "./style.css";
 
 const URL_SEND = "https://us-central1-mercdev-academy.cloudfunctions.net/login";
 const SUCCESS_STATUS = 200;
 
-class LoginForm extends React.Component {
+class LoginScreen extends React.Component {
   constructor(props) {
     super(props);
 
@@ -41,7 +36,7 @@ class LoginForm extends React.Component {
   }
 
   request(url, email, password) {
-    return new Promise(function (resolve, reject) {
+    return new Promise(function(resolve, reject) {
       const xhr = new XMLHttpRequest();
       const json = {
         email,
@@ -85,13 +80,11 @@ class LoginForm extends React.Component {
   }
 
   render() {
-    console.log(this.props.user)
-    if (this.props.user.userName !== null) return (
-      <Redirect to='/user' />
-    );
     return (
       <div>
-        <h2 className={`${styles.block__text} ${styles['block__text--title']}`}>Log In</h2>
+        <h2 className={`${styles.block__text} ${styles["block__text--title"]}`}>
+          Log In
+        </h2>
         <form
           className={styles.block__form}
           id="form"
@@ -115,15 +108,15 @@ class LoginForm extends React.Component {
             value={this.state.password}
           />
           {this.state.isLoginError && (
-            <p className={styles.block__error}>E-Mail or password is incorrect</p>
+            <p className={styles.block__error}>
+              E-Mail or password is incorrect
+            </p>
           )}
-          <Button id="login">
-            Login
-          </Button>
+          <Button id="login">Login</Button>
         </form>
       </div>
     );
   }
 }
 
-export default LoginForm;
+export default LoginScreen;

@@ -1,24 +1,11 @@
 import React from "react";
-import {
-  BrowserRouter as Router,
-  Route,
-  Redirect,
-  Switch
-} from "react-router-dom";
-import LoginScreen from './screens/loginScreen.jsx';
-import UserScreen from './screens/userScreen.jsx';
-import Wrapper from './components/wrapper/wrapper.jsx';
-import LoginForm from './components/login-form/login-form.jsx';
-import User from './components/user/user.jsx';
-import './normalize.css';
-import './style.css';
-
-
-// import { Router } from 'react-router-dom';
-// import Route from 'react-router-dom/es/Route';
-// import Switch from 'react-router-dom/es/Switch';
-// import Redirect from 'react-router-dom/es/Redirect';
-
+import ReactDOM from "react-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import LoginScreen from "./screens/loginScreen/loginScreen.jsx";
+import UserScreen from "./screens/userScreen/userScreen.jsx";
+import Wrapper from "./components/wrapper/wrapper.jsx";
+import "./normalize.css";
+import "./style.css";
 
 class App extends React.Component {
   constructor(props) {
@@ -55,29 +42,22 @@ class App extends React.Component {
 
   render() {
     return (
-      <Router>
-        <Switch>
-          <Route exact path='/login' component={() => <LoginScreen setUser={this.setUser} user={this.state.user} />} />
-          <Route exact path='/user' component={() => <UserScreen logOut={this.removeUser} user={this.state.user} />} />
-          <Redirect to='/login' />
-        </Switch>
-
-
-
-        {/* <Wrapper>
-          {!this.state.user.photo && !this.state.user.userName && (
-            <LoginForm setUser={this.setUser} />
-          )}
-          {this.state.user.photo && this.state.user.userName && (
-            <User
-              logOut={this.removeUser}
-              photo={this.state.user.photo}
-              userName={this.state.user.userName}
-            />
-          )}
-        </Wrapper> */}
-      </Router>
-
+      <Wrapper>
+        <Router>
+          <Switch>
+            {!this.state.user.photo && !this.state.user.userName && (
+              <Route component={() => <LoginScreen setUser={this.setUser} />} />
+            )}
+            {this.state.user.photo && this.state.user.userName && (
+              <Route
+                component={() => (
+                  <UserScreen logOut={this.removeUser} user={this.state.user} />
+                )}
+              />
+            )}
+          </Switch>
+        </Router>
+      </Wrapper>
     );
   }
 }
