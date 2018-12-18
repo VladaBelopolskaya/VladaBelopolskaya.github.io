@@ -1,7 +1,7 @@
 const path = require("path");
 
 module.exports = {
-  mode: 'development',
+  mode: "development",
   entry: "./src/app.jsx",
   module: {
     rules: [
@@ -12,8 +12,8 @@ module.exports = {
           {
             loader: "babel-loader",
             options: {
-              plugins: ['@babel/plugin-transform-react-jsx'],
-              presets: ['@babel/preset-env']
+              plugins: ["@babel/plugin-transform-react-jsx"],
+              presets: ["@babel/preset-env"]
             }
           }
         ]
