@@ -6,8 +6,8 @@ import UserScreen from "./screens/userScreen/userScreen.jsx";
 import Wrapper from "./components/wrapper/wrapper.jsx";
 import "./normalize.css";
 import "./style.css";
-import AppContext from "./appProvider.jsx";
-import { AppProvider } from "./appProvider.jsx";
+import AppContext from "./appContext.jsx";
+import { AppProvider } from "./appContext.jsx";
 
 class App extends React.Component {
   render() {
@@ -20,18 +20,12 @@ class App extends React.Component {
               return (
                 <Router>
                   <Switch>
-                    {!context.state.user.photo &&
-                      !context.state.user.userName && (
-                        <Route
-                          component={() => (
-                            <LoginScreen setUser={context.setUser} />
-                          )}
-                        />
-                      )}
-                    {context.state.user.photo &&
-                      context.state.user.userName && (
-                        <Route component={() => <UserScreen />} />
-                      )}
+                    {!context.state.user && (
+                      <Route component={() => <LoginScreen />} />
+                    )}
+                    {context.state.user && (
+                      <Route component={() => <UserScreen />} />
+                    )}
                   </Switch>
                 </Router>
               );

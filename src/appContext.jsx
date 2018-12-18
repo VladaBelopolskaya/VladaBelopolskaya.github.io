@@ -7,10 +7,7 @@ export class AppProvider extends React.Component {
     super(props);
 
     this.state = {
-      user: {
-        userName: null,
-        photo: null
-      }
+      user: null
     };
 
     this.setUser = this.setUser.bind(this);
@@ -19,10 +16,7 @@ export class AppProvider extends React.Component {
 
   removeUser() {
     this.setState({
-      user: {
-        userName: null,
-        photo: null
-      }
+      user: null
     });
   }
 

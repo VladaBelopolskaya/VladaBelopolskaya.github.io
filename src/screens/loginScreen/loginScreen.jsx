@@ -2,6 +2,7 @@ import React from "react";
 import Button from "../../components/button/button.jsx";
 import Input from "../../components/input/input.jsx";
 import styles from "./style.css";
+import AppContext from "../../appContext.jsx";
 
 const URL_SEND = "https://us-central1-mercdev-academy.cloudfunctions.net/login";
 const SUCCESS_STATUS = 200;
@@ -62,11 +63,11 @@ class LoginScreen extends React.Component {
     });
   }
 
-  login(evt) {
+  login(evt, setUser) {
     evt.preventDefault();
     this.request(URL_SEND, this.state.email, this.state.password)
       .then(response => {
-        this.props.setUser(response.name, response.photoUrl);
+        setUser(response.name, response.photoUrl);
       })
       .catch(text => {
         this.setState({
@@ -81,40 +82,47 @@ class LoginScreen extends React.Component {
 
   render() {
     return (
-      <div>
-        <h2 className={`${styles.block__text} ${styles["block__text--title"]}`}>
-          Log In
-        </h2>
-        <form
-          className={styles.block__form}
-          id="form"
-          method="post"
-          onSubmit={this.login}
-        >
-          <Input
-            name="email"
-            id="email"
-            type="email"
-            placeholder="E-Mail"
-            onChange={this.handleChangeEmail}
-            value={this.state.email}
-          />
-          <Input
-            name="password"
-            id="password"
-            type="password"
-            placeholder="Password"
-            onChange={this.handleChangePassword}
-            value={this.state.password}
-          />
-          {this.state.isLoginError && (
-            <p className={styles.block__error}>
-              E-Mail or password is incorrect
-            </p>
-          )}
-          <Button id="login">Login</Button>
-        </form>
-      </div>
+      <AppContext.Consumer>
+        {context => (
+          <div>
+            <h2
+              className={`${styles.block__text} ${
+                styles["block__text--title"]
+              }`}
+            >
+              Log In
+            </h2>
+            <form
+              className={styles.block__form}
+              method="post"
+              onSubmit={evt => {
+                this.login(evt, context.setUser);
+              }}
+            >
+              <Input
+                name="email"
+                type="email"
+                placeholder="E-Mail"
+                onChange={this.handleChangeEmail}
+                value={this.state.email}
+              />
+              <Input
+                name="password"
+                type="password"
+                placeholder="Password"
+                onChange={this.handleChangePassword}
+                value={this.state.password}
+              />
+              {this.state.isLoginError && (
+                <p className={styles.block__error}>
+                  E-Mail or password is incorrect
+                </p>
+              )}
+              <Button type="submit">Login</Button>
+            </form>
+          </div>
+        )}
+      </AppContext.Consumer>
     );
   }
 }
