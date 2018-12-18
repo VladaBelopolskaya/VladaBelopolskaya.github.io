@@ -16,7 +16,6 @@ class App extends React.Component {
         <Wrapper>
           <AppContext.Consumer>
             {context => {
-              console.log(context);
               return (
                 <Router>
                   <Switch>

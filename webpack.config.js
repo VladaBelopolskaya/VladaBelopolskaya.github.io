@@ -12,8 +12,8 @@ module.exports = {
           {
             loader: "babel-loader",
             options: {
-              plugins: ["@babel/plugin-transform-react-jsx"],
-              presets: ["@babel/preset-env"]
+              plugins: ["@babel/plugin-transform-react-jsx"]
+              // presets: ["@babel/preset-env"]
             }
           }
         ]
